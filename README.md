@@ -23,11 +23,24 @@ npm run dev
 
 The app require Google Authentication under the hood, create API credential and adjust your env variables.
 
+(Enable googlea API) [https://console.cloud.google.com/apis/library/speech.googleapis.com]
+
+(oauthclient)[https://console.cloud.google.com/apis/credentials/oauthclient]
+ 
+ 1. OAuth client ID
+ 2. Web application
+ 3. Authorised JavaScript origins -> http://localhost:3000
+ 4. Authorised redirect URIs -> http://localhost:3000/api/auth/callback/google
+
+(credentials consent)[https://console.cloud.google.com/apis/credentials/consent]
+
 ## Updates
 
-Some improvement on the list :
+Some improvements are on the list :
 
 **Next up:**
 
 - [ ] Enable audio generation longuer than 3 minutes (3000 characters)
-- [ ] Authentication for new user on invitation only
+- [ ] Authentication for new user on invitation only (quotas)
+- [ ] Multilingual
+- [ ] Voice selection
