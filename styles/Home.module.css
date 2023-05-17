@@ -1,0 +1,186 @@
+
+.container {
+  min-height: 100vh;
+  padding: 0 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.containerCopyText {
+  padding: 0 0.5rem;
+  display: flex;
+  flex-basis: 1;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 5rem;
+}
+
+.textArea {
+  min-height: 6rem;
+  min-width: 40rem;
+  margin: 0 .5rem;
+}
+
+.title a {
+  color: #0070f3;
+  text-decoration: none;
+}
+
+.title a:hover,
+.title a:focus,
+.title a:active {
+  text-decoration: underline;
+}
+
+.title {
+  margin: 0 0 1rem;
+  line-height: 1.15;
+  font-size: 3.6rem;
+}
+
+.title {
+  text-align: center;
+}
+
+.title,
+.description {
+  text-align: center;
+}
+
+
+.description {
+  line-height: 1.5;
+  font-size: 1.5rem;
+  margin-top: .2rem;
+}
+
+.grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  max-width: 800px;
+  margin-top: 3rem;
+}
+
+.logo {
+  height: 1em;
+}
+
+.button {
+  min-width: 60px;
+  text-decoration: none;
+  border: none;
+  border-radius: .1rem;
+  padding: 5px;
+  background-color: var(--primary);
+  color: white;
+  transition: 0.5s;
+  text-align: center;
+  cursor: pointer;
+  margin: 0 .5rem;
+}
+
+.button:disabled {
+  pointer-events: none;
+}
+
+.buttonDisabled {
+  opacity: .4;
+  pointer-events: none;
+}
+
+.button:hover {
+  width: 65px;
+  background-color: var(--primary-dark);
+  align-items: center;
+  padding: .5rem;
+  border-radius: .2rem;
+}
+
+.buttonPrimary {
+  min-width: 30rem;
+}
+
+.buttonSecondary {
+  background-color: var(--secondary);
+}
+
+.buttonSecondary:hover {
+  background-color: var(--secondary-dark);
+}
+
+.clearButton {
+  padding: .2rem;
+}
+
+
+.iconButton:hover, .clearButton:hover {
+  padding: .2rem;
+}
+
+.audioPlayer {
+  margin: 2rem 0;
+}
+
+
+.buttonGroup {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.entryGroup {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: row-reverse;
+}
+
+.editIcon {
+  width: 22px;
+}
+
+.header {
+  margin-left: auto;
+}
+
+.main {
+  padding: 2rem 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+.footer {
+  width: 100%;
+  height: 100px;
+  border-top: 1px solid #eaeaea;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row-reverse;
+}
+.footer img {
+  margin-left: 0.5rem;
+}
+.footer a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  font-size: 12px;
+}
+
+@media (max-width: 600px) {
+  .grid {
+    width: 100%;
+    flex-direction: column;
+  }
+}
