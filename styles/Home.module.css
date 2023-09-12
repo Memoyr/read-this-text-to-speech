@@ -1,7 +1,7 @@
-
 .container {
-  min-height: 100vh;
-  padding: 0 0.5rem;
+  min-height: calc(100vh - 12px);
+  width: 100vw;
+  padding: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -21,7 +21,7 @@
 .textArea {
   min-height: 6rem;
   min-width: 40rem;
-  margin: 0 .5rem;
+  margin: 0 0.5rem;
 }
 
 .title a {
@@ -50,11 +50,10 @@
   text-align: center;
 }
 
-
 .description {
   line-height: 1.5;
   font-size: 1.5rem;
-  margin-top: .2rem;
+  margin-top: 0.2rem;
 }
 
 .grid {
@@ -75,14 +74,14 @@
   min-width: 60px;
   text-decoration: none;
   border: none;
-  border-radius: .1rem;
+  border-radius: 0.1rem;
   padding: 5px;
   background-color: var(--primary);
   color: white;
   transition: 0.5s;
   text-align: center;
   cursor: pointer;
-  margin: 0 .5rem;
+  margin: 0 0.5rem;
 }
 
 .button:disabled {
@@ -90,7 +89,7 @@
 }
 
 .buttonDisabled {
-  opacity: .4;
+  opacity: 0.4;
   pointer-events: none;
 }
 
@@ -98,8 +97,8 @@
   width: 65px;
   background-color: var(--primary-dark);
   align-items: center;
-  padding: .5rem;
-  border-radius: .2rem;
+  padding: 0.5rem;
+  border-radius: 0.2rem;
 }
 
 .buttonPrimary {
@@ -115,18 +114,17 @@
 }
 
 .clearButton {
-  padding: .2rem;
+  padding: 0.2rem;
 }
 
-
-.iconButton:hover, .clearButton:hover {
-  padding: .2rem;
+.iconButton:hover,
+.clearButton:hover {
+  padding: 0.2rem;
 }
 
 .audioPlayer {
-  margin: 2rem 0;
+  margin: 0.5rem 0;
 }
-
 
 .buttonGroup {
   display: flex;
@@ -165,6 +163,8 @@
   justify-content: space-between;
   align-items: center;
   flex-direction: row-reverse;
+  padding: 0 1.2rem;
+  align-items: end;
 }
 .footer img {
   margin-left: 0.5rem;
