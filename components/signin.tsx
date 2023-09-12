@@ -1,60 +1,50 @@
-import { signIn, signOut, useSession } from "next-auth/react";
-import styles from "../styles/signin.module.css";
+import { signIn, signOut } from 'next-auth/react'
+import styles from '../styles/signin.module.css'
+import { StatusContext, StatusProvider } from './authStatus.provider'
+import { useContext } from 'react'
 
-export default function Signin() {
-  const { data: session, status } = useSession()
-  const loading = status === 'loading'
-
+const SigninContent = () => {
+  const { status } = useContext(StatusContext)
   return (
-    <div>
-      <div className={styles.signedInStatus}>
-        <p
-          className={`nojs-show ${!session && loading ? styles.loading : styles.loaded
-            }`}
-        >
-          {!session && (
-            <>
-              <span className={styles.notSignedInText}>
-                You are not signed in
-              </span>
-              <a
-                href={`/api/auth/signin`}
-                className={styles.buttonPrimary}
-                onClick={(e) => {
-                  e.preventDefault()
-                  signIn()
-                }}
-              >
-                Sign in
-              </a>
-            </>
-          )}
-          {session?.user && (
-            <>
-              <span
-                style={{ backgroundImage: `url(${session.user.image})` }}
-                className={styles.avatar}
-              />
-              <span className={styles.signedInText}>
-                <small>Signed in as</small>
-                <br />
-                <strong>{session.user.email || session.user.name}</strong>
-              </span>
-              <a
-                href={`/api/auth/signout`}
-                className={styles.button}
-                onClick={(e) => {
-                  e.preventDefault()
-                  signOut()
-                }}
-              >
-                Sign out
-              </a>
-            </>
-          )}
-        </p>
-      </div>
-
-    </div>
+    <>
+      {status != 'authenticated' && (
+        <>
+          <a
+            href={`/api/auth/signin`}
+            className={styles.buttonPrimary}
+            onClick={(e) => {
+              e.preventDefault()
+              signIn()
+            }}
+          >
+            Sign in
+          </a>
+        </>
+      )}
+      {status === 'authenticated' && (
+        <>
+          <a
+            href={`/api/auth/signout`}
+            className={styles.button}
+            onClick={(e) => {
+              e.preventDefault()
+              signOut()
+            }}
+          >
+            Log out
+          </a>
+        </>
+      )}
+    </>
   )
 }
+
+const Signin = () => {
+  return (
+    <StatusProvider>
+      <SigninContent />
+    </StatusProvider>
+  )
+}
+
+export default Signin

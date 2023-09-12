@@ -1,6 +1,9 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
-
-html,body {
+html,
+body {
   padding: 0;
   margin: 0;
   font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
@@ -33,7 +36,8 @@ ul {
   list-style: none;
 }
 
-button, button:disabled {
+button,
+button:disabled {
   padding: 0.5rem 1rem;
   font-weight: bold;
 }
@@ -70,13 +74,17 @@ code {
   border-radius: 5px;
   padding: 0.75rem;
   font-size: 1.1rem;
-  font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-    DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+  font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
+    Bitstream Vera Sans Mono, Courier New, monospace;
 }
 
 :root {
   --primary: #14a791;
-  --primary-dark:#057262;
-  --secondary: #8784E9;
-  --secondary-dark:#504da5;
+  --primary-dark: #057262;
+  --secondary: #8784e9;
+  --secondary-dark: #504da5;
+}
+
+.l-active {
+  color: palevioletred;
 }

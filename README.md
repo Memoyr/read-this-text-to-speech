@@ -41,6 +41,11 @@ Some improvements are on the list :
 **Next up:**
 
 - [ ] Enable audio generation longuer than 3 minutes (3000 characters)
-- [ ] Authentication for new user on invitation only (quotas)
+- [ ] Authentication for new user on invitation only (quotas) (paid Solution, or test user account for demo ?)
 - [ ] Multilingual
 - [ ] Voice selection
+- [ ] Darkmode & page design
+- [ ] Design Shortcuts panel , add more shortcuts
+- [ ] Design audio player & placement
+- [ ] Install tailwind
+- [ ] try elevenlabs 
