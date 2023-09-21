@@ -34,7 +34,7 @@ const useAudio = (
       progressBarRef.current.value = currentTime.toString()
       progressBarRef.current.style.setProperty(
         '--range-progress',
-        `${(Number(progressBarRef.current.value) / duration) * 100 - 7}%`
+        `${(Number(progressBarRef.current.value) / duration) * 100 - 15}%`
       )
 
       playAnimationRef.current = requestAnimationFrame(repeat)
@@ -140,7 +140,7 @@ const Player: React.FC<PlayerProps> = ({ src, shouldPlay, title }) => {
 
     return {
       date: `${day} ${month} ${year}`,
-      version: `# ${version}`,
+      version: ` ${version}`,
     }
   }
 
@@ -177,8 +177,12 @@ const Player: React.FC<PlayerProps> = ({ src, shouldPlay, title }) => {
 
   return (
     <>
-      <section className="flex w-full items-center justify-center">
-        <article className="group relative flex h-[12rem] w-[50rem] overflow-hidden  rounded-r-xl bg-[#3a4448]">
+      <section className="flex w-full items-center justify-center my-3.5">
+        <article
+          className={`group relative flex h-[12rem] w-[50rem] overflow-hidden  rounded-r-xl bg-[#3a4448] ${
+            !src ? ' pointer-events-none' : ''
+          }`}
+        >
           <aside className="absolute right-0 flex h-full flex-col justify-center space-y-8 p-3">
             <a href={src.replace(/\?.*$/, '')} download="audio">
               <svg
@@ -206,8 +210,9 @@ const Player: React.FC<PlayerProps> = ({ src, shouldPlay, title }) => {
             />
 
             <button
+              disabled={!src}
               onClick={toggle}
-              className="absolute inset-0 flex h-full w-full items-center justify-center bg-[#0c0c0c]/70 opacity-100 transition-all"
+              className="absolute inset-0 flex h-full w-full items-center justify-center bg-[#0c0c0c]/70 opacity-100 transition-all  disabled:pointer-events-none"
             >
               {playing && (
                 <>
@@ -226,7 +231,9 @@ const Player: React.FC<PlayerProps> = ({ src, shouldPlay, title }) => {
               {!playing && (
                 <>
                   <svg
-                    className="h-w-14 w-14 cursor-pointer text-white transition-all hover:text-yellow-400"
+                    className={`h-w-14 w-14 cursor-pointer text-white transition-all hover:text-yellow-400 ${
+                      !src ? ' opacity-25' : ''
+                    }`}
                     fill="currentColor"
                     viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg"
@@ -256,9 +263,13 @@ const Player: React.FC<PlayerProps> = ({ src, shouldPlay, title }) => {
               <header className="space-y-1">
                 <div className="text-3xl font-medium truncate">{title}</div>
 
-                <div className="font-medium">
-                  Version: {getDateAndVersion().version}
-                </div>
+                {src && (
+                  <>
+                    <div className="text-sm">
+                      Version: {getDateAndVersion().version}
+                    </div>
+                  </>
+                )}
                 {/*             <div className="text-sm">
                         mapped by
                         <a
@@ -271,46 +282,49 @@ const Player: React.FC<PlayerProps> = ({ src, shouldPlay, title }) => {
               </header>
 
               <div className="flex space-x-3">
-                <span className="flex items-center space-x-1">
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    ></path>
-                  </svg>
-                  <div>{getDateAndVersion().date}</div>
-                </span>
+                {src && (
+                  <>
+                    <span className="flex items-center space-x-1">
+                      <svg
+                        className="h-5 w-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                        ></path>
+                      </svg>
+                      <div>{getDateAndVersion().date}</div>
+                    </span>
+                  </>
+                )}
               </div>
 
-              <div className="flex space-x-2">
-                <input
-                  type="range"
-                  ref={progressBarRef}
-                  defaultValue="0"
-                  onChange={handleProgressChange}
-                />
+              <input
+                type="range"
+                ref={progressBarRef}
+                defaultValue="0"
+                onChange={handleProgressChange}
+              />
+
+              <div className="flex">
+                <div className="flex-none">{formatTime(currentTime)} </div>
                 <span
-                  className="rounded-full bg-green-800 px-2 font-medium text-white w-full"
+                  className="rounded-full bg-green-800 px-2 font-medium text-white w-full flex-auto mx-2"
                   ref={progressBarStyleRef}
                   onClick={handleProgressClick}
                 >
-                  {formatTime(currentTime)} / {formatTime(duration)}
                   <span
-                    className="absolute h-6  rounded-full bg-green-500 left-6 px-2 font-medium opacity-75 w-[var(--range-progress)]"
+                    className="absolute h-6  rounded-full bg-green-500 px-0  font-medium opacity-75 w-[var(--range-progress)]  ml-[-7px]"
                     ref={progressBarRef}
                   ></span>
+                  <div className="flex justify-end">{formatTime(duration)}</div>
                 </span>
-                <div className="flex items-center space-x-1">
-                  <span className="h-5 w-full rounded-full bg-green-500"></span>
-                </div>
               </div>
             </section>
           </div>
