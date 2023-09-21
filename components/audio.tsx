@@ -15,12 +15,14 @@ const AudioContent: React.FC<AudioProps> = ({ audioref, toRead }) => {
   const [audioHash, setAudioHash] = useState(Date.now())
   const [start, setStart] = useState(false)
   const [trackurl, setTrackurl] = useState('')
+  const [extractTitle, setExtractTitle] = useState('')
+
   const apiAccessToken: string = data?.accessToken
 
   useEffect(() => {
     if (toRead != '') {
-      console.log('ben voyon')
       readText(toRead)
+      setExtractTitle(toRead.slice(0, 45))
     }
   }, [toRead])
 
@@ -103,7 +105,7 @@ const AudioContent: React.FC<AudioProps> = ({ audioref, toRead }) => {
             controls
             ref={audioref}
           /> */}
-          <Player src={trackurl} shouldPlay={start} />
+          <Player src={trackurl} shouldPlay={start} title={extractTitle} />
         </>
       )}
     </>

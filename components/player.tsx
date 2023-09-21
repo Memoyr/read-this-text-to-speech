@@ -9,8 +9,14 @@ import React, {
 const useAudio = (
   url: string,
   shouldPlay: boolean,
-  progressBarRef
-): [boolean, MouseEventHandler | undefined, number, number] => {
+  progressBarRef: React.RefObject<HTMLInputElement>
+): [
+  boolean,
+  MouseEventHandler | undefined,
+  number,
+  number,
+  React.RefObject<HTMLAudioElement>
+] => {
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null)
   const [playing, setPlaying] = useState(false)
   const [duration, setDuration] = useState(0)
@@ -19,17 +25,20 @@ const useAudio = (
 
   const toggle: MouseEventHandler = () => setPlaying(!playing)
   const playAnimationRef = useRef(0)
+  const audioRef = useRef<HTMLAudioElement>(audio)
 
   const repeat = useCallback(() => {
-    const currentTime = audio.currentTime
-    setTimeProgress(currentTime)
-    progressBarRef.current.value = currentTime
-    progressBarRef.current.style.setProperty(
-      '--range-progress',
-      `${(progressBarRef.current.value / duration) * 100 - 7}%`
-    )
+    if (audio && progressBarRef.current) {
+      const currentTime = audio.currentTime
+      setTimeProgress(currentTime)
+      progressBarRef.current.value = currentTime.toString()
+      progressBarRef.current.style.setProperty(
+        '--range-progress',
+        `${(Number(progressBarRef.current.value) / duration) * 100 - 7}%`
+      )
 
-    playAnimationRef.current = requestAnimationFrame(repeat)
+      playAnimationRef.current = requestAnimationFrame(repeat)
+    }
   }, [audio, duration, progressBarRef, setTimeProgress])
 
   useEffect(() => {
@@ -57,11 +66,14 @@ const useAudio = (
 
   useEffect(() => {
     if (audio) {
-      audio.addEventListener('loadedmetadata', () => {
+      const handleMetadataLoaded = () => {
         setDuration(audio.duration)
-      })
+      }
+
+      audio.addEventListener('loadedmetadata', handleMetadataLoaded)
+
       return () => {
-        //audio.removeEventListener('ended', () => setPlaying(false))
+        audio.removeEventListener('loadedmetadata', handleMetadataLoaded)
       }
     }
   }, [audio, duration])
@@ -85,22 +97,52 @@ const useAudio = (
     }
   }, [audio, duration, currentTime])
 
-  return [playing, toggle, duration, currentTime]
+  return [playing, toggle, duration, currentTime, audioRef]
 }
 
 interface PlayerProps {
   src: string
   shouldPlay: boolean
+  title: string
 }
 
-const Player: React.FC<PlayerProps> = ({ src, shouldPlay }) => {
-  const progressBarRef = useRef()
+const Player: React.FC<PlayerProps> = ({ src, shouldPlay, title }) => {
+  const progressBarStyleRef = useRef<HTMLSpanElement>(null)
+  const progressBarRef = useRef<HTMLInputElement>(null)
 
-  const [playing, toggle, duration, currentTime] = useAudio(
+  const [playing, toggle, duration, currentTime, audioRef] = useAudio(
     src,
     shouldPlay,
     progressBarRef
   )
+  const getDateAndVersion = () => {
+    const date = new Date()
+    const day = date.getDate()
+    const monthIndex = date.getMonth()
+    const year = date.getFullYear()
+    const monthNames = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ]
+    const month = monthNames[monthIndex]
+
+    const version = '1.0.0' // TODO
+
+    return {
+      date: `${day} ${month} ${year}`,
+      version: `# ${version}`,
+    }
+  }
 
   const formatTime = (time) => {
     if (time && !isNaN(time)) {
@@ -113,33 +155,47 @@ const Player: React.FC<PlayerProps> = ({ src, shouldPlay }) => {
     return '00:00'
   }
 
-  const handleProgressChange = () => {
-    //audioRef.current.currentTime = progressBarRef.current.value;
-    // changer le temps de l'audio
+  const handleProgressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // TODO - needed ?
+    if (audioRef.current && progressBarRef.current) {
+      audioRef.current.currentTime = Number(event.target.value)
+    }
+  }
+
+  const handleProgressClick = (
+    event: React.MouseEvent<HTMLSpanElement, MouseEvent>
+  ) => {
+    // TODO
+    /*     if (progressBarRef.current && audioRef.current) {
+      const rect = progressBarStyleRef.current.getBoundingClientRect()
+      const x = event.clientX - rect.left
+      const progress = x / rect.width
+      const newTime = progress * audioRef.current.duration
+      audioRef.current.currentTime = newTime
+    } */
   }
 
   return (
     <>
-      <div>
-        <button onClick={toggle}>{playing ? 'Pause' : 'Play'}</button>
-      </div>
       <section className="flex w-full items-center justify-center">
         <article className="group relative flex h-[12rem] w-[50rem] overflow-hidden  rounded-r-xl bg-[#3a4448]">
           <aside className="absolute right-0 flex h-full flex-col justify-center space-y-8 p-3">
-            <svg
-              className="invisible h-7 w-7 text-stone-200 opacity-0 transition-all hover:scale-[120%] hover:text-white group-hover:visible group-hover:opacity-100"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-              ></path>
-            </svg>
+            <a href={src.replace(/\?.*$/, '')} download="audio">
+              <svg
+                className="invisible h-7 w-7 text-stone-200 opacity-0 transition-all hover:scale-[120%] hover:text-white group-hover:visible group-hover:opacity-100"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                ></path>
+              </svg>
+            </a>
           </aside>
 
           <div className="absolute inset-y-0 left-0 w-48">
@@ -198,12 +254,12 @@ const Player: React.FC<PlayerProps> = ({ src, shouldPlay }) => {
 
             <section className="absolute inset-0 flex flex-col justify-between p-4 text-white">
               <header className="space-y-1">
-                <div className="text-3xl font-medium">
-                  This is the beginning of what is beign read..
+                <div className="text-3xl font-medium truncate">{title}</div>
+
+                <div className="font-medium">
+                  Version: {getDateAndVersion().version}
                 </div>
-                {/* 
-                      <div className="font-medium">subtext...</div>
-                      <div className="text-sm">
+                {/*             <div className="text-sm">
                         mapped by
                         <a
                           href="#"
@@ -211,7 +267,7 @@ const Player: React.FC<PlayerProps> = ({ src, shouldPlay }) => {
                         >
                           something
                         </a>
-                      </div> */}
+                      </div>  */}
               </header>
 
               <div className="flex space-x-3">
@@ -230,7 +286,7 @@ const Player: React.FC<PlayerProps> = ({ src, shouldPlay }) => {
                       d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                     ></path>
                   </svg>
-                  <div>20 Oct 2023</div>
+                  <div>{getDateAndVersion().date}</div>
                 </span>
               </div>
 
@@ -241,7 +297,11 @@ const Player: React.FC<PlayerProps> = ({ src, shouldPlay }) => {
                   defaultValue="0"
                   onChange={handleProgressChange}
                 />
-                <span className="rounded-full bg-green-800 px-2 font-medium text-white w-full">
+                <span
+                  className="rounded-full bg-green-800 px-2 font-medium text-white w-full"
+                  ref={progressBarStyleRef}
+                  onClick={handleProgressClick}
+                >
                   {formatTime(currentTime)} / {formatTime(duration)}
                   <span
                     className="absolute h-6  rounded-full bg-green-500 left-6 px-2 font-medium opacity-75 w-[var(--range-progress)]"
