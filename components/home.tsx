@@ -6,36 +6,40 @@ import React, { useRef, useState, useContext, FormEvent } from 'react'
 import Textarea from 'react-expanding-textarea'
 import Signin from '@/components/signin'
 import Header from '@/components/header'
+import Audio from '@/components/audio'
+import Textbox from '@/components/textbox'
+
 import { StatusProvider, StatusContext } from './authStatus.provider'
 
 const HomeContent = () => {
   const textareaRef = useRef(null)
   const audioRef = useRef(null)
+  const { status, data } = useContext(StatusContext)
+  const [editDisabled, setEditDisabled] = useState(true)
   const [isAudioLoading, setIsAudioLoading] = useState(false)
   const [isAudioDisabled, setIsAudioDisabled] = useState(false)
-  const [editDisabled, setEditDisabled] = useState(true)
-  const [audioHash, setAudioHash] = useState(Date.now())
-  const { status, data } = useContext(StatusContext)
-  const apiAccessToken: string = data?.accessToken
+  const [textSent, setTextSent] = useState('')
 
   const handleSubmit = async (event: FormEvent) => {
-    audioRef.current.src = ''
-    readText(textareaRef.current.value)
+    //audioRef.current.src = ''
+    setTextSent(textareaRef.current.value)
+    console.log(textSent)
+    //readText(textareaRef.current.value)
   }
 
   const handleClear = () => {
     textareaRef.current.value = ''
-    audioRef.current.autoplay = false
+    /*     audioRef.current.autoplay = false
     audioRef.current.src = ''
     setIsAudioDisabled(false)
     setIsAudioLoading(false)
-    setEditDisabled(true)
+    setEditDisabled(true) */
   }
 
   const handleEdit = () => {
-    audioRef.current.src = ''
+    /* audioRef.current.src = ''
     setIsAudioDisabled(false)
-    setIsAudioLoading(false)
+    setIsAudioLoading(false) */
   }
 
   const handleKeyDown = (event) => {
@@ -45,79 +49,13 @@ const HomeContent = () => {
     }
   }
 
-  const readText = async (text) => {
-    setIsAudioLoading(true)
-    setIsAudioDisabled(true)
-
-    const response = await fetch('/api/read', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        text,
-        token: apiAccessToken,
-      }),
-    })
-
-    if (!response.ok) {
-      alert("there's probably an error of authentication")
-      //throw new Error("Read api returned an error");
-    }
-
-    const data = await response.json()
-
-    if (!data) {
-      //throw new Error("Read api returned empty");
-      alert('please enter paste some text')
-      return
-    }
-    setAudioHash(Date.now())
-    writeMp3(data)
-  }
-
-  const writeMp3 = async (base64MP3) => {
-    const response = await fetch('/api/toMP3', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        base64MP3,
-      }),
-    })
-
-    if (!response) {
-      throw new Error('ToMP3 api returned an error')
-    }
-    const data = await response.json()
-
-    if (!data) {
-      throw new Error('Write MP3 empty')
-    }
-
-    setIsAudioLoading(true)
-    setIsAudioDisabled(true)
-    setTimeout(() => {
-      // TODO know when audiofile ready, in case of longer process
-
-      if (audioRef.current !== null) {
-        audioRef.current.src = `./audio/audio.mp3?${audioHash}`
-        audioRef.current.autoplay = true
-        setIsAudioLoading(false)
-        setEditDisabled(false)
-      }
-    }, 1000)
-  }
-
   return (
     <div className={styles.container}>
       <Head>
-        <title>Read this!</title>
+        <title>Read that!</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-
       {status == 'authenticated' && (
         <>
           <header className={styles.header}></header>
@@ -125,9 +63,9 @@ const HomeContent = () => {
       )}
       <main className={styles.main}>
         <h1 className="mt-8">
-          <svg className="h-24" role="img" aria-label="Read me this!">
-            <title>Read me this!</title>
-            <desc>A text image that says 'Read me this!'</desc>
+          <svg className="h-24" role="img" aria-label="Read that!">
+            <title>Read that!</title>
+            <desc>A text image that says 'Read that!'</desc>
             <text
               x="10"
               y="50"
@@ -135,34 +73,41 @@ const HomeContent = () => {
               fontSize="55"
               fontFamily="Marker Felt"
             >
-              Read me this!
+              Read that!
             </text>
           </svg>
         </h1>
 
-        <p className={styles.description}>This is a text-to-speech tool.</p>
+        {/*         <p className={styles.description}>This is a text-to-speech tool.</p>
+         */}
+        <p className="text-center max-w-lg text-2xl font-semibold leading-loose text-gray mb-10">
+          This is a text-to-speech tool.
+        </p>
 
         {status != 'authenticated' && (
           <>
-            <p>You need to get authentication</p>
-            <Signin />
+            <Signin asButton={true} />
           </>
         )}
         {status === 'authenticated' && (
           <>
+            {/*             <Textbox />
+             */}{' '}
             <p>Keayboard Shortcuts: Command: Read - Keybinding:Shift+Enter</p>
             <div className={styles.containerCopyText}>
               <form className={styles.formGroup}>
-                <Textarea
-                  className={styles.textArea}
-                  defaultValue=""
-                  id="copied"
-                  name="copied"
-                  placeholder="Enter some text with a max of 3000 characters."
-                  ref={textareaRef}
-                  disabled={isAudioDisabled}
-                  onKeyDown={handleKeyDown}
-                />
+                {
+                  <Textarea
+                    className={styles.textArea}
+                    defaultValue=""
+                    id="copied"
+                    name="copied"
+                    placeholder="Enter some text with a max of 3000 characters."
+                    ref={textareaRef}
+                    disabled={isAudioDisabled}
+                    onKeyDown={handleKeyDown}
+                  />
+                }
 
                 <div className={styles.entryGroup}>
                   <button
@@ -211,15 +156,16 @@ const HomeContent = () => {
           </>
         )}
       </main>
+      <Audio aref={audioRef} txt={textSent} />
 
-      <footer className={styles.footer}>
+      <footer>
         <div className={styles.audioPlayerContainer}>
-          <audio
+          {/*      <audio
             className={styles.audioPlayer}
             src={''}
             controls
             ref={audioRef}
-          />
+          /> */}
         </div>
         <div>
           <a

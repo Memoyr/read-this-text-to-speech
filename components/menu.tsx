@@ -67,7 +67,7 @@ const DrawerOverlay = () => {
               </Link>
             </li>
             <li>
-              <Signin />
+              <Signin asButton={false} />
             </li>
           </ul>
         </div>

@@ -79,12 +79,22 @@ code {
 }
 
 :root {
-  --primary: #14a791;
-  --primary-dark: #057262;
-  --secondary: #8784e9;
-  --secondary-dark: #504da5;
+  --primary: #5f8bff;
+  --primary-dark: #3a59aa;
+  --secondary: #1bb823;
+  --secondary-dark: #14951a;
 }
 
 .l-active {
-  color: palevioletred;
+  color: var(--primary-dark);
+}
+
+/* =========================
+Custom Input range 
+=============================*/
+
+/* Input range - chrome and safari */
+
+input[type='range'] {
+  display: none;
 }
