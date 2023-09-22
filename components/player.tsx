@@ -4,11 +4,11 @@ import React, {
   MouseEventHandler,
   useRef,
   useCallback,
+  useContext,
 } from 'react'
+import { AppContext } from './home'
 
 const useAudio = (
-  url: string,
-  shouldPlay: boolean,
   progressBarRef: React.RefObject<HTMLInputElement>
 ): [
   boolean,
@@ -27,6 +27,14 @@ const useAudio = (
   const playAnimationRef = useRef(0)
   const audioRef = useRef<HTMLAudioElement>(audio)
 
+  const context = useContext(AppContext)
+
+  if (!context) {
+    throw new Error('ChildComponent must be used within a AppContext.Provider')
+  }
+
+  const { state, dispatch } = context
+
   const repeat = useCallback(() => {
     if (audio && progressBarRef.current) {
       const currentTime = audio.currentTime
@@ -42,10 +50,10 @@ const useAudio = (
   }, [audio, duration, progressBarRef, setTimeProgress])
 
   useEffect(() => {
-    if (url) {
-      setAudio(new Audio(url))
+    if (state.url) {
+      setAudio(new Audio(state.url))
     }
-  }, [url])
+  }, [state.url])
 
   useEffect(() => {
     if (audio) {
@@ -79,12 +87,12 @@ const useAudio = (
   }, [audio, duration])
 
   useEffect(() => {
-    if (shouldPlay) {
+    if (state.url) {
       setPlaying(true)
     } else {
       setPlaying(false)
     }
-  }, [shouldPlay, audio])
+  }, [state.url, audio])
 
   useEffect(() => {
     if (audio && playing) {
@@ -92,7 +100,7 @@ const useAudio = (
         setCurrentTime(audio.currentTime)
       })
       return () => {
-        //audio.removeEventListener('ended', () => setPlaying(false))
+        audio.removeEventListener('timeupdate', () => setPlaying(false))
       }
     }
   }, [audio, duration, currentTime])
@@ -100,21 +108,19 @@ const useAudio = (
   return [playing, toggle, duration, currentTime, audioRef]
 }
 
-interface PlayerProps {
-  src: string
-  shouldPlay: boolean
-  title: string
-}
-
-const Player: React.FC<PlayerProps> = ({ src, shouldPlay, title }) => {
+const Player: React.FC = () => {
   const progressBarStyleRef = useRef<HTMLSpanElement>(null)
   const progressBarRef = useRef<HTMLInputElement>(null)
+  const context = useContext(AppContext)
 
-  const [playing, toggle, duration, currentTime, audioRef] = useAudio(
-    src,
-    shouldPlay,
-    progressBarRef
-  )
+  if (!context) {
+    throw new Error('ChildComponent must be used within a AppContext.Provider')
+  }
+
+  const { state, dispatch } = context
+
+  const [playing, toggle, duration, currentTime, audioRef] =
+    useAudio(progressBarRef)
   const getDateAndVersion = () => {
     const date = new Date()
     const day = date.getDate()
@@ -180,11 +186,11 @@ const Player: React.FC<PlayerProps> = ({ src, shouldPlay, title }) => {
       <section className="flex w-full items-center justify-center my-3.5">
         <article
           className={`group relative flex h-[12rem] w-[50rem] overflow-hidden  rounded-r-xl bg-[#3a4448] ${
-            !src ? ' pointer-events-none' : ''
+            !state.url ? ' pointer-events-none' : ''
           }`}
         >
           <aside className="absolute right-0 flex h-full flex-col justify-center space-y-8 p-3">
-            <a href={src.replace(/\?.*$/, '')} download="audio">
+            <a href={state.url?.replace(/\?.*$/, '')} download="audio">
               <svg
                 className="invisible h-7 w-7 text-stone-200 opacity-0 transition-all hover:scale-[120%] hover:text-white group-hover:visible group-hover:opacity-100"
                 fill="none"
@@ -193,9 +199,9 @@ const Player: React.FC<PlayerProps> = ({ src, shouldPlay, title }) => {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
                 ></path>
               </svg>
@@ -210,7 +216,7 @@ const Player: React.FC<PlayerProps> = ({ src, shouldPlay, title }) => {
             />
 
             <button
-              disabled={!src}
+              disabled={!state.url}
               onClick={toggle}
               className="absolute inset-0 flex h-full w-full items-center justify-center bg-[#0c0c0c]/70 opacity-100 transition-all  disabled:pointer-events-none"
             >
@@ -232,16 +238,16 @@ const Player: React.FC<PlayerProps> = ({ src, shouldPlay, title }) => {
                 <>
                   <svg
                     className={`h-w-14 w-14 cursor-pointer text-white transition-all hover:text-yellow-400 ${
-                      !src ? ' opacity-25' : ''
+                      !state.url ? ' opacity-25' : ''
                     }`}
                     fill="currentColor"
                     viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                      clip-rule="evenodd"
+                      clipRule="evenodd"
                     ></path>
                   </svg>
                 </>
@@ -261,9 +267,11 @@ const Player: React.FC<PlayerProps> = ({ src, shouldPlay, title }) => {
 
             <section className="absolute inset-0 flex flex-col justify-between p-4 text-white">
               <header className="space-y-1">
-                <div className="text-3xl font-medium truncate">{title}</div>
+                <div className="text-3xl font-medium truncate">
+                  {state.trackTitle}
+                </div>
 
-                {src && (
+                {state.url && (
                   <>
                     <div className="text-sm">
                       Version: {getDateAndVersion().version}
@@ -282,7 +290,7 @@ const Player: React.FC<PlayerProps> = ({ src, shouldPlay, title }) => {
               </header>
 
               <div className="flex space-x-3">
-                {src && (
+                {state.url && (
                   <>
                     <span className="flex items-center space-x-1">
                       <svg
@@ -293,9 +301,9 @@ const Player: React.FC<PlayerProps> = ({ src, shouldPlay, title }) => {
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
                           d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                         ></path>
                       </svg>
