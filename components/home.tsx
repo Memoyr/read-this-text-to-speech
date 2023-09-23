@@ -6,13 +6,17 @@ import Signin from '@/components/signin'
 import Header from '@/components/header'
 import Audio from '@/components/audio'
 import Textbox from '@/components/textbox'
-import { IAppContext, IAppState, appReducer } from '@/store/app-reducer'
+import { appReducer } from '@/store/app-reducer'
 
 import { StatusProvider, StatusContext } from './authStatus.provider'
+import LanguageMenu from './language'
+import { IAppContext, IAppState } from '@/types/app'
+import VoicesMenu from './voices'
 
 const initialAppState: IAppContext = {
   isAudioDisabled: true,
   isAudioLoading: false,
+  reRun: false,
 }
 
 export const AppContext = createContext<IAppState | undefined>(undefined)
@@ -67,7 +71,9 @@ const HomeContent = () => {
               <p className="text-sm p-10">
                 Keayboard Shortcuts: Command: Read - Keybinding:Shift+Enter
               </p>
-
+              selected: {state.language}
+              <LanguageMenu />
+              <VoicesMenu />
               <Textbox txtref={textareaRef} />
             </>
           )}

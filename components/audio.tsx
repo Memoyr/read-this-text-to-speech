@@ -22,10 +22,10 @@ const AudioContent: React.FC<AudioProps> = ({ audioref }) => {
   const { state, dispatch } = context
 
   useEffect(() => {
-    if (state.textSent) {
+    if (state.reRun && state.textSent != null) {
       readText(state.textSent)
     }
-  }, [state.textSent])
+  }, [state.textSent, state.reRun])
 
   const writeMp3 = async (base64MP3) => {
     const response = await fetch('/api/toMP3', {
@@ -70,22 +70,20 @@ const AudioContent: React.FC<AudioProps> = ({ audioref }) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        text,
+        input: text,
         token: apiAccessToken,
+        voice: state.voice,
       }),
     })
 
     if (!response.ok) {
-      alert("there's probably an error of authentication")
-      //throw new Error("Read api returned an error");
+      throw new Error('Read api returned an error')
     }
 
     const data = await response.json()
 
     if (!data) {
-      //throw new Error("Read api returned empty");
-      alert('please enter paste some text')
-      return
+      throw new Error('Read api returned empty')
     }
     setAudioHash(Date.now())
     writeMp3(data)

@@ -1,21 +1,4 @@
-export interface IAppContext {
-  textSent?: string
-  trackTitle?: string
-  url?: string
-  isAudioDisabled?: boolean
-  isAudioLoading?: boolean
-}
-interface IAction {
-  type: string
-  textSent?: string
-  url?: string
-  isAudioDisabled?: boolean
-  isAudioLoading?: boolean
-}
-export interface IAppState {
-  state: IAppContext
-  dispatch: React.Dispatch<IAction>
-}
+import { IAction, IAppContext } from '@/types/app'
 
 export function appReducer(app: IAppContext, action: IAction): IAppContext {
   switch (action.type) {
@@ -34,6 +17,24 @@ export function appReducer(app: IAppContext, action: IAction): IAppContext {
         url: action.url,
         isAudioLoading: false,
         isAudioDisabled: false,
+        reRun: false,
+      }
+    }
+    case 'lang': {
+      return {
+        ...app,
+        language: action.language,
+      }
+    }
+    case 'voice': {
+      return {
+        ...app,
+        voice: {
+          languageCodes: action.voice.languageCodes[0],
+          name: action.voice.name,
+          ssmlGender: action.voice.ssmlGender,
+        },
+        reRun: true,
       }
     }
 
