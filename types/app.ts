@@ -44,13 +44,9 @@ export interface Voice {
 }
 
 export const LanguageTags: LanguageTag[] = [
-  { tag: 'ar-SA', description: 'Arabic (Saudi Arabia)' },
-  { tag: 'bn-BD', description: 'Bangla (Bangladesh)' },
   { tag: 'bn-IN', description: 'Bangla (India)' },
   { tag: 'cs-CZ', description: 'Czech (Czech Republic)' },
   { tag: 'da-DK', description: 'Danish (Denmark)' },
-  { tag: 'de-AT', description: 'Austrian German' },
-  { tag: 'de-CH', description: 'Swiss German' },
   { tag: 'de-DE', description: 'Standard German (as spoken in Germany)' },
   { tag: 'el-GR', description: 'Modern Greek' },
   { tag: 'en-AU', description: 'Australian English' },
@@ -59,7 +55,7 @@ export const LanguageTags: LanguageTag[] = [
   { tag: 'en-IE', description: 'Irish English' },
   { tag: 'en-IN', description: 'Indian English' },
   { tag: 'en-NZ', description: 'New Zealand English' },
-  { tag: 'en-US', description: 'US English' },
+  { tag: 'en-US', description: 'English (USA)' },
   { tag: 'en-ZA', description: 'English (South Africa)' },
   { tag: 'es-AR', description: 'Argentine Spanish' },
   { tag: 'es-CL', description: 'Chilean Spanish' },
@@ -79,7 +75,6 @@ export const LanguageTags: LanguageTag[] = [
   { tag: 'hi-IN', description: 'Hindi (India)' },
   { tag: 'hu-HU', description: 'Hungarian (Hungary)' },
   { tag: 'id-ID', description: 'Indonesian (Indonesia)' },
-  { tag: 'it-CH', description: 'Swiss Italian' },
   { tag: 'it-IT', description: 'Standard Italian (as spoken in Italy)' },
   { tag: 'ja-JP', description: 'Japanese (Japan)' },
   { tag: 'ko-KR', description: 'Korean (Republic of Korea)' },
@@ -100,7 +95,6 @@ export const LanguageTags: LanguageTag[] = [
   { tag: 'sk-SK', description: 'Slovak (Slovakia)' },
   { tag: 'sv-SE', description: 'Swedish (Sweden)' },
   { tag: 'ta-IN', description: 'Indian Tamil' },
-  { tag: 'ta-LK', description: 'Sri Lankan Tamil' },
   { tag: 'th-TH', description: 'Thai (Thailand)' },
   { tag: 'tr-TR', description: 'Turkish (Turkey)' },
   { tag: 'zh-CN', description: 'Mainland China, simplified characters' },

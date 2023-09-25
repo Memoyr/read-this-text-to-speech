@@ -29,7 +29,7 @@ const HomeContent = () => {
 
   return (
     <AppContext.Provider value={{ state, dispatch }}>
-      <div className={styles.container}>
+      <div className={` w-full px-2.5 ${styles.container}`}>
         <Head>
           <title>Read that!</title>
           <link rel="icon" href="/favicon.ico" />
@@ -40,7 +40,7 @@ const HomeContent = () => {
             <header className={styles.header}></header>
           </>
         )}
-        <main className={` w-[100%] max-w-prose ${styles.main}`}>
+        <main className={` w-full md:w-[60%] ${styles.main}`}>
           <h1 className="mt-8">
             <svg className="h-24" role="img" aria-label="Read that!">
               <title>Read that!</title>
@@ -71,7 +71,7 @@ const HomeContent = () => {
               <p className="text-sm p-10">
                 Keayboard Shortcuts: Command: Read - Keybinding:Shift+Enter
               </p>
-              selected: {state.language}
+
               <LanguageMenu />
               <VoicesMenu />
               <Textbox txtref={textareaRef} />

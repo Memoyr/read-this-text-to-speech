@@ -28,8 +28,11 @@ const TextBox: React.FC<TBProps> = ({ txtref }) => {
       event.preventDefault()
       handleSubmit()
     }
-    if (txtref.current.value != '') {
+    if (txtref.current.value != '' && txtref.current.value != content) {
       setContent(txtref.current.value)
+      dispatch({
+        type: 'updated',
+      })
     } else {
       setContent('')
     }
@@ -79,7 +82,7 @@ const TextBox: React.FC<TBProps> = ({ txtref }) => {
                   disabled={state.isAudioLoading}
                   onKeyDown={handleKeyDown}
                   onBlur={handleBlur}
-                  className="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
+                  className="w-full px-0 h-[100px] text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
                   required
                 ></textarea>
               </div>
@@ -127,7 +130,11 @@ const TextBox: React.FC<TBProps> = ({ txtref }) => {
                 <button
                   type="button"
                   onClick={handleSubmit}
-                  disabled={state.isAudioLoading || content == ''}
+                  disabled={
+                    state.isAudioLoading ||
+                    content == '' ||
+                    state.isAudioDisabled
+                  }
                   className="read-btn disabled:pointer-events-none disabled:bg-gray-500 disabled:opacity-50 text-sm inline-flex items-center py-2.5 px-4  font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
                 >
                   {!state.isAudioLoading ? 'Read' : 'loading'}

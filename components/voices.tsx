@@ -6,7 +6,7 @@ const VoicesMenu: React.FC = () => {
   const context = useContext(AppContext)
   const { status, data } = useContext(StatusContext)
   const [voiceList, setVoiceList] = useState([])
-
+  const [selectedValue, setSelectedValue] = useState('default')
   const apiAccessToken: string = data?.accessToken
 
   if (!context) {
@@ -16,8 +16,13 @@ const VoicesMenu: React.FC = () => {
   const { state, dispatch } = context
 
   useEffect(() => {
+    setSelectedValue('default')
+  }, []) // Empty dependency array means this effect runs once on mount
+
+  useEffect(() => {
     if (state.language) {
       getVoices(state.language)
+      setSelectedValue('default')
     }
   }, [state.language])
 
@@ -26,6 +31,7 @@ const VoicesMenu: React.FC = () => {
       type: 'voice',
       voice: voiceList[e.target.value],
     })
+    setSelectedValue(e.target.value)
   }
 
   const getVoices = async (tag) => {
@@ -58,10 +64,11 @@ const VoicesMenu: React.FC = () => {
       </label>
       <select
         onChange={handleOnChange}
-        id="languages"
+        value={selectedValue}
+        id="voices"
         className=" mb-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
       >
-        <option defaultValue={'Choose a voice'}>Choose a voice</option>
+        <option defaultValue="default">Choose a voice</option>
         {voiceList.map((voice, index) => (
           <option value={index} key={index}>
             {voice.name}

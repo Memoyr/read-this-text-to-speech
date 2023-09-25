@@ -9,6 +9,14 @@ export function appReducer(app: IAppContext, action: IAction): IAppContext {
         trackTitle: action.textSent.slice(0, 45),
         isAudioLoading: true,
         isAudioDisabled: true,
+        reRun: true,
+      }
+    }
+    case 'updated': {
+      return {
+        ...app,
+        isAudioDisabled: false,
+        //reRun: true,
       }
     }
     case 'ready': {
@@ -16,7 +24,7 @@ export function appReducer(app: IAppContext, action: IAction): IAppContext {
         ...app,
         url: action.url,
         isAudioLoading: false,
-        isAudioDisabled: false,
+        isAudioDisabled: true,
         reRun: false,
       }
     }
@@ -24,6 +32,8 @@ export function appReducer(app: IAppContext, action: IAction): IAppContext {
       return {
         ...app,
         language: action.language,
+        voice: null,
+        isAudioDisabled: true,
       }
     }
     case 'voice': {
@@ -34,7 +44,8 @@ export function appReducer(app: IAppContext, action: IAction): IAppContext {
           name: action.voice.name,
           ssmlGender: action.voice.ssmlGender,
         },
-        reRun: true,
+        //reRun: true,
+        isAudioDisabled: false,
       }
     }
 
