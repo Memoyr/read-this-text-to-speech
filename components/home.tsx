@@ -33,6 +33,11 @@ const HomeContent = () => {
         <Head>
           <title>Read that!</title>
           <link rel="icon" href="/favicon.ico" />
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Sriracha&display=swap"
+            rel="stylesheet"
+          />
         </Head>
         <Header />
         {status == 'authenticated' && (
@@ -40,22 +45,10 @@ const HomeContent = () => {
             <header className={styles.header}></header>
           </>
         )}
-        <main className={` w-full md:w-[60%] ${styles.main}`}>
-          <h1 className="mt-8">
-            <svg className="h-24" role="img" aria-label="Read that!">
-              <title>Read that!</title>
-              <desc>A text image that says 'Read that!'</desc>
-              <text
-                x="10"
-                y="50"
-                fill="black"
-                fontSize="55"
-                fontFamily="Marker Felt"
-              >
-                Read that!
-              </text>
-            </svg>
-          </h1>
+        <main
+          className={` w-full md:w-[60%] lg:w-[50%] xxl:w-[30%] ${styles.main}`}
+        >
+          <h1 className={styles.slogan}>READ THAT!</h1>
 
           <p className="text-center max-w-lg text-2xl font-semibold leading-loose text-gray mb-10">
             This is a text-to-speech tool.
@@ -80,16 +73,14 @@ const HomeContent = () => {
         </main>
         <Audio aref={audioRef} />
 
-        <footer>
-          <div>
-            <a
-              href="https://github.com/Memoyr"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Powered by @memoyr
-            </a>
-          </div>
+        <footer className="px-2 text-xs h-16 mt-16">
+          <a
+            href="https://github.com/Memoyr"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Powered by @memoyr
+          </a>
         </footer>
       </div>
     </AppContext.Provider>
