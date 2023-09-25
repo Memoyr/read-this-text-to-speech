@@ -28,11 +28,13 @@ const TextBox: React.FC<TBProps> = ({ txtref }) => {
       event.preventDefault()
       handleSubmit()
     }
-    if (txtref.current.value != '' && txtref.current.value != content) {
+    if (txtref.current.value != '') {
       setContent(txtref.current.value)
-      dispatch({
-        type: 'updated',
-      })
+      if (txtref.current.value != content) {
+        dispatch({
+          type: 'updated',
+        })
+      }
     } else {
       setContent('')
     }

@@ -186,7 +186,8 @@
   }
 }
 
-/* PROBLEM ici avec le dom */
-.read-btn {
-  opacity: 0.5 !important;
+h1.slogan {
+  font-family: 'Sriracha', cursive;
+  font-weight: 400;
+  font-size: 70px;
 }
