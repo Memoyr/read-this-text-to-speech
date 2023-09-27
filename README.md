@@ -1,4 +1,4 @@
-# Read me this! - A basic text-to-speech tool
+# Read that! - A basic text-to-speech tool
 
 Small text to speech tool, for personal usage.
 
