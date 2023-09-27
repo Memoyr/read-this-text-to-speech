@@ -1,14 +1,14 @@
-import styles from '../styles/signin.module.css'
 import { StatusContext, StatusProvider } from './authStatus.provider'
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect, forwardRef } from 'react'
 import Player from '@/components/player'
 import { AppContext } from './home'
+import Player2 from './player2'
 
-interface AudioProps {
+/* interface AudioProps {
   audioref: any // tempo
 }
-
-const AudioContent: React.FC<AudioProps> = ({ audioref }) => {
+ */
+const Audio: React.FC = () => {
   const { status, data } = useContext(StatusContext)
   const [audioHash, setAudioHash] = useState(Date.now())
   const apiAccessToken: string = data?.accessToken
@@ -52,14 +52,6 @@ const AudioContent: React.FC<AudioProps> = ({ audioref }) => {
         type: 'ready',
         url: `./audio/audio.mp3?${audioHash}`,
       })
-
-      /*       if (audioRef.current !== null) {
-        audioRef.current.src = `./audio/audio.mp3?${audioHash}`
-        audioRef.current.autoplay = true
-
-        setIsAudioLoading(false)
-        setEditDisabled(false)
-      } */
     }, 1000)
   }
 
@@ -91,22 +83,25 @@ const AudioContent: React.FC<AudioProps> = ({ audioref }) => {
 
   return (
     <>
-      {status != 'authenticated' && <></>}
-      {status === 'authenticated' && (
-        <>
-          <Player />
-        </>
-      )}
+      <StatusProvider>
+        {status != 'authenticated' && <></>}
+        {status === 'authenticated' && (
+          <>
+            {/* <Player /> */}
+            <Player2></Player2>
+          </>
+        )}
+      </StatusProvider>
     </>
   )
 }
 
-const Audio = ({ aref }) => {
+/* const Audio = ({ aref }) => {
   return (
     <StatusProvider>
       <AudioContent audioref={aref} />
     </StatusProvider>
   )
 }
-
+*/
 export default Audio
