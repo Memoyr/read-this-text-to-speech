@@ -2,7 +2,15 @@
 
 Small text to speech tool, for personal usage.
 
-Using (React, Nextjs, Nextjs-auth, Google text-to-speech API)
+Using :
+
+- React
+- Next.js
+- Nextjs-auth
+- Google text-to-speech API
+
+This is an MVP project.
+<img src="./screenshot-MVP.png" width="800px" height="586.5px" />
 
 ## Running Locally
 
