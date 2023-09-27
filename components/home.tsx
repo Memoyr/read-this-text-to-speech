@@ -31,11 +31,27 @@ const HomeContent = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <AppContext.Provider value={{ state, dispatch }}>
-        <div className={` w-full px-2.5 ${styles.container}`}>
-          <Head>
-            <title>Read that!</title>
-            <link rel="icon" href="/favicon.ico" />
+    <AppContext.Provider value={{ state, dispatch }}>
+      <div className={` w-full px-2.5 ${styles.container}`}>
+        <Head>
+          <title>Read that!</title>
+          <link rel="icon" href="/favicon.ico" />
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Sriracha&display=swap"
+            rel="stylesheet"
+          />
+        </Head>
+        <Header />
+        {status == 'authenticated' && (
+          <>
+            <header className={styles.header}></header>
+          </>
+        )}
+        <main
+          className={` w-full md:w-[60%] lg:w-[50%] xxl:w-[30%] ${styles.main}`}
+        >
+          <h1 className={styles.slogan}>READ THAT!</h1>
 
             {/* <!--  TEMPORARY import of font see:  https://nextjs.org/docs/messages/no-stylesheets-in-head-component -->  */}
             <link rel="preconnect" href="https://fonts.googleapis.com" />
