@@ -39,6 +39,7 @@ Some improvements are on the list :
 
 **Next up:**
 
-- [ ] Design final choice for component lib - MUI or other
-- [ ] Darkmode setup
+- [ ] Design global
+- [ ] Darkmode
 - [ ] Design Shortcuts panel , add more shortcuts
+- [ ] Clean Old CSS since now we use tailwind
